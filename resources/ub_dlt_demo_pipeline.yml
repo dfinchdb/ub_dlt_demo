@@ -1,0 +1,12 @@
+# The main pipeline for ub_dlt_demo
+resources:
+  pipelines:
+    ub_dlt_demo_pipeline:
+      name: ub_dlt_demo_pipeline
+      target: ub_dlt_demo_${bundle.environment}
+      libraries:
+        - notebook:
+            path: ../src/dlt_pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: /Workspace/${workspace.file_path}/src
