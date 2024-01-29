@@ -5,6 +5,7 @@ CSV Options - https://docs.databricks.com/en/ingestion/auto-loader/options.html#
 Data Quality - https://docs.databricks.com/en/delta-live-tables/expectations.html
 Event Hooks - https://docs.databricks.com/en/delta-live-tables/event-hooks.html
 Monitoring - https://docs.databricks.com/en/delta-live-tables/observability.html
+GitHub Repository - https://github.com/dfinchdb/ub_dlt_demo.git
 """
 
 import dlt
