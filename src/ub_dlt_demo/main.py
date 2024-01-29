@@ -40,43 +40,18 @@ def customerpiidata(spark) -> DataFrame:
     return df
 
 
-def customergtlimits(spark) -> DataFrame:
-    df = (
-        spark.readStream.format("cloudFiles")
-        .options(
-            **{
-                "cloudFiles.format": "csv",
-                "header": "true",
-                "delimiter": "||",
-                "rescuedDataColumn": "_rescued_data",
-                "cloudFiles.validateOptions": "true",
-                "cloudFiles.useNotifications": "false",
-                "cloudFiles.inferColumnTypes": "true",
-                "cloudFiles.backfillInterval": "1 day",
-                "cloudFiles.schemaEvolutionMode": "rescue",
-                "cloudFiles.allowOverwrites": "false",
-            }
-        )
-        .load(
-            "abfss://databricks-poc@oneenvadls.dfs.core.windows.net/umpqua_poc/landing_zone/customergtlimits"
-        )
-    )
-    return df
-
-
 def customerpiidata_clean() -> DataFrame:
     df = dlt.read_stream("customerpiidata")
     return df
 
 
-def corporate_customer_data() -> DataFrame:
-    pii_df = dlt.read_stream("customerpiidata_clean").filter(col("is_company") == 1)
-    limits_df = dlt.read_stream("customergtlimits")
-    df = (
-        dlt.read_stream("customerpiidata_clean")
-        .filter(col("is_company") == 1)
-        .join(dlt.read_stream("customergtlimits"), customer_id == customer_id, "left")
-    )
+def corporate_customer_data():
+    df = dlt.read_stream("customerpiidata_clean").filter(F.col("is_company") == 1)
+    return df
+
+
+def consumer_customer_data():
+    df = dlt.read_stream("customerpiidata_clean").filter(F.col("is_company") == 0)
     return df
 
 
