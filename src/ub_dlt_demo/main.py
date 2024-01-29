@@ -17,6 +17,9 @@ from pyspark.sql.types import *
 
 def customerpiidata(spark) -> DataFrame:
     spark = SparkSession.builder.getOrCreate()
+    storage_account = "ubsadatabrickspocnpl2"
+    storage_container = "umpquapocdev"
+    lz_base_path = "umpqua_poc/landing_zone"
     df = (
         spark.readStream.format("cloudFiles")
         .options(
@@ -34,7 +37,7 @@ def customerpiidata(spark) -> DataFrame:
             }
         )
         .load(
-            "abfss://databricks-poc@oneenvadls.dfs.core.windows.net/umpqua_poc/landing_zone/customerpiidata"
+            f"abfss://{storage_container}@{storage_account}.dfs.core.windows.net/{lz_base_path}/customerpiidata"
         )
     )
     return df
